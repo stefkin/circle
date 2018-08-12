@@ -25,6 +25,7 @@ selector xs msg =
           [select [ on "change" (Json.map msg (Json.map intToX targetValueIntParse)) ]
               (List.map optionTag xs)
           ]
+
 flatCircle : List (a1, a2) -> Html msg
 flatCircle pitches =
     let
@@ -34,7 +35,7 @@ flatCircle pitches =
           Html.span [] [ text (toString pc)]
 
     in
-      Html.div [] (List.map renderPc pcs)
+      Html.div [class "level"] (List.map renderPc pcs)
 
 stylesheet : String -> Html msg
 stylesheet href =

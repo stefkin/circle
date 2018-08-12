@@ -134,20 +134,59 @@ genScale pos tonic =
     pcCircle = map pitchToPitchClass circle
     tonicIndex = Maybe.withDefault 0 <| indexOf tonic pcCircle
     firstScalePitchIndex = tonicIndex - pos + 12
-    singleScaleWrap = take 7 <| drop firstScalePitchIndex pcCircle
+    singleScaleWrap = take 7 <| drop firstScalePitchIndex circle
   in
-    filter (\ (pc, o) -> member pc singleScaleWrap) circle
+    singleScaleWrap
+    -- filter (\ (pc, o) -> member pc singleScaleWrap) circle
+modeToTonicPosition : Mode -> Int
+modeToTonicPosition mode =
+    case mode of
+      Lydian     -> 0
+      Major      -> 1
+      Ionian     -> 1
+      Mixolydian -> 2
+      Dorian     -> 3
+      Minor      -> 4
+      Aeolian    -> 4
+      Phrygian   -> 5
+      Locrian    -> 6
+      _          -> 0
 
 scale : Mode -> PitchClass -> List Pitch
-scale mode =
-  case mode of
-    Lydian     -> genScale 0
-    Major      -> genScale 1
-    Ionian     -> genScale 1
-    Mixolydian -> genScale 2
-    Dorian     -> genScale 3
-    Minor      -> genScale 4
-    Aeolian    -> genScale 4
-    Phrygian   -> genScale 5
-    Locrian    -> genScale 6
-    _          -> genScale 0
+scale = genScale << modeToTonicPosition
+
+type ChordType = Maj | Min | Dim
+type alias ChordPosition = Int
+type alias Chord = (ChordPosition, ChordType)
+
+scaleChords : Mode -> List Chord
+scaleChords mode =
+    let
+        pos = 7 - (modeToTonicPosition mode)
+        chordTypes = [Maj, Maj, Maj, Min, Min, Min, Dim]
+        baseChordPositions = [1,5,2,6,3,7,4]
+        chordPositions = (drop pos baseChordPositions) ++
+                         (take pos baseChordPositions)
+    in
+        zip chordPositions chordTypes
+
+chordToString : Chord -> String
+chordToString (pos, ct) =
+    let
+        modifier = case ct of
+                       Maj ->
+                           String.toUpper
+                       Min ->
+                           String.toLower
+                       Dim ->
+                           (flip (String.append) "o") >> String.toLower
+        base = case pos of
+                   1 -> "I"
+                   2 -> "II"
+                   3 -> "III"
+                   4 -> "IV"
+                   5 -> "V"
+                   6 -> "VI"
+                   _ -> "VII"
+    in
+        modifier base
