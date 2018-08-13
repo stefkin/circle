@@ -179,7 +179,7 @@ chordToString (pos, ct) =
                        Min ->
                            String.toLower
                        Dim ->
-                           (flip (String.append) "o") >> String.toLower
+                           (flip (String.append) "º") >> String.toLower
         base = case pos of
                    1 -> "I"
                    2 -> "II"

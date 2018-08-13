@@ -26,16 +26,22 @@ selector xs msg =
               (List.map optionTag xs)
           ]
 
-flatCircle : List (a1, a2) -> Html msg
-flatCircle pitches =
+padJoin n xs =
+    List.map (String.padRight n ' ') xs |> String.join " "
+
+renderPitches : List (a1, a2) -> Html msg
+renderPitches pitches =
     let
-      pitchToPc = Tuple.first
-      pcs = List.map pitchToPc pitches
+      pitchToStr = toString << Tuple.first
+      pcs = List.map pitchToStr pitches
       renderPc pc =
           Html.span [] [ text (toString pc)]
-
     in
-      Html.div [class "level"] (List.map renderPc pcs)
+      Html.div [class "columns"] [text <| padJoin 4 pcs]
+
+renderChords : List String -> Html msg
+renderChords chords =
+    Html.div [class "columns"] [text <| padJoin 4 chords ]
 
 stylesheet : String -> Html msg
 stylesheet href =

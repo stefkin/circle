@@ -2,7 +2,7 @@ module Main exposing (main)
 import Euteprea exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import ViewComponents exposing (stylesheet, flatCircle, selector)
+import ViewComponents exposing (stylesheet, renderPitches, selector, renderChords)
 
 type alias Model =
     { tonic : PitchClass
@@ -34,19 +34,18 @@ view model =
         selectedScale = scale model.mode model.tonic
         circleWrap = List.take 12 circle
         chords = scaleChords model.mode |> List.map chordToString
-
     in
         Html.section [class "section"]
             [Html.div [class "container"]
-                 [ Html.div [class "level"]
-                       [ Html.div [class "level-left"]
+                 [ Html.div [class "columns"]
+                       [ Html.div [class "column is-6"]
                              [ selector pcs ChangeTonic
                              , selector modes ChangeMode
                              ]
-                       , Html.div [class "level-right"]
-                           [ flatCircle selectedScale
-                           , flatCircle circleWrap
-                           , Html.div [] [text <| String.join " " chords ]
+                       , Html.div [class "column is-6"]
+                           [ renderPitches circleWrap
+                           , renderPitches selectedScale
+                           , renderChords chords
                            ]
                        ]
                  , stylesheet "https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css"
