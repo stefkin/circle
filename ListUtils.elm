@@ -1,4 +1,4 @@
-module ListUtils exposing (indexOf, get, zip)
+module ListUtils exposing (indexOf, get, zip, find)
 import List exposing (..)
 
 indexOf : a -> List a -> Maybe Int
@@ -24,3 +24,15 @@ zip xs ys =
   case (xs, ys) of
     (x :: xs_, y :: ys_) -> (x,y) :: zip xs_ ys_
     _ -> []
+
+find : (a -> Bool) -> List a -> Maybe a
+find predicate list =
+    case list of
+        [] ->
+            Nothing
+
+        first :: rest ->
+            if predicate first then
+                Just first
+            else
+                find predicate rest
