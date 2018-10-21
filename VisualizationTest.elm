@@ -30,7 +30,7 @@ defaultArcConfig : Arc
 defaultArcConfig =
     { innerRadius = radius - 100
     , outerRadius = radius
-    , cornerRadius = 10
+    , cornerRadius = 0
     , startAngle = 0
     , endAngle = 360 / 12
     , padAngle = 0
@@ -39,62 +39,74 @@ defaultArcConfig =
 
 toRad deg = deg * pi / 180
 
-nthArcConfig : Float -> Int -> Arc
-nthArcConfig radDelta index =
+nthArcConfig : {outerRadius: Float, innerRadius: Float} -> Int -> Arc
+nthArcConfig baseConfig index =
   { defaultArcConfig |
+    outerRadius = baseConfig.outerRadius,
+    innerRadius = baseConfig.innerRadius,
     startAngle = toRad (toFloat index) * 30,
-    endAngle = toRad ((toFloat index) + 1) * 30,
-    innerRadius = radius + radDelta - 60,
-    outerRadius = radius + radDelta
+    endAngle = toRad ((toFloat index) + 1) * 30
   }
 
 radius : Float
 radius =
     min w h / 2
 
-makeLabel radDelta index (label, isSelected) =
+makeLabel configFn index (label, color) =
     let
-        slice = nthArcConfig radDelta index
+        slice = configFn index
         ( x, y ) =
             Shape.centroid { slice |
-              innerRadius = slice.outerRadius - 30,
-              outerRadius = slice.outerRadius - 30
+              innerRadius = (slice.outerRadius + slice.innerRadius) / 2,
+              outerRadius = (slice.outerRadius + slice.innerRadius) / 2
             }
-        fillColor = Fill <| if isSelected then Color.white else Color.black
     in
         text_
             [ transform [ Translate x y ]
             , dy (em 0.35)
             , textAnchor AnchorMiddle
-            , fill fillColor
+            , fill <| Fill color.text
             ]
             [ text label ]
 
-makeDonutSector : Float -> Int -> (a, Bool) -> Svg msg
-makeDonutSector radDelta index (label, isSelected) =
+makeDonutSector : (Int -> Arc) -> Int -> (a, CellColor) -> Svg msg
+makeDonutSector configFn index (label, color) =
     let
-        slice = nthArcConfig radDelta index
-        fillColor = Fill <| if isSelected then Color.blue else Color.grey
+        slice = configFn index
     in
-        Path.element (Shape.arc <| slice) [ fill fillColor , stroke Color.white ]
+        Path.element (Shape.arc <| slice) [ fill <| Fill color.background, stroke Color.white ]
+
+type alias CellColor = { text : Color, background : Color }
+
+selectedCellColor =
+  { text = Color.white
+  , background = Color.blue
+  }
+
+regularCellColor =
+  { text = Color.black
+  , background = Color.grey
+  }
 
 circleVisualization circleWrap selectedScale chords =
     let
       circleWrap_ =
-          List.map (\n -> if List.member n selectedScale then (n, True) else (n, False)) circleWrap
+          List.map (\n -> if List.member n selectedScale then (n, selectedCellColor) else (n, regularCellColor)) circleWrap
       chords_ =
           let
               zz = zip selectedScale chords
               noteToChord n =
                   Tuple.second (Maybe.withDefault ("", "") <| find (\(n_,c) -> n == n_) zz)
           in
-            List.map (\n -> if List.member n selectedScale then (noteToChord n, False) else ("", False)) circleWrap
+            List.map (\n -> if List.member n selectedScale then (noteToChord n, regularCellColor) else ("", regularCellColor)) circleWrap
+      outerDonutSettings = nthArcConfig { outerRadius = radius, innerRadius = radius - 60 }
+      innerDonutSettings = nthArcConfig { outerRadius = radius - 60, innerRadius = radius - 100 }
     in
         svg [ viewBox 0 0 w h ]
         [ g [ transform [ Translate (w / 2) (h / 2) ] ]
-            [ g [] <| List.indexedMap (makeDonutSector 0.0) circleWrap_
-            , g [] <| List.indexedMap (makeLabel 0.0) circleWrap_
-            , g [] <| List.indexedMap (makeDonutSector (-60.0)) chords_
-            , g [] <| List.indexedMap (makeLabel (-60.0)) chords_
+            [ g [] <| List.indexedMap (makeDonutSector outerDonutSettings) circleWrap_
+            , g [] <| List.indexedMap (makeLabel outerDonutSettings) circleWrap_
+            , g [] <| List.indexedMap (makeDonutSector innerDonutSettings) chords_
+            , g [] <| List.indexedMap (makeLabel innerDonutSettings) chords_
             ]
         ]
