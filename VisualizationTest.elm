@@ -6,10 +6,10 @@ import Color exposing (Color)
 import Path
 import Shape exposing (defaultPieConfig, Arc)
 import TypedSvg exposing (g, svg, text_)
-import TypedSvg.Attributes exposing (fontSize, dy, fill, stroke, textAnchor, transform, viewBox)
+import TypedSvg.Attributes exposing (fontWeight, fontSize, dy, fill, stroke, textAnchor, transform, viewBox)
 import TypedSvg.Attributes.InPx exposing (height, width)
 import TypedSvg.Core exposing (Svg, text)
-import TypedSvg.Types exposing (Length(..), AnchorAlignment(..), Fill(..), Transform(..), em)
+import TypedSvg.Types exposing (FontWeight(..), Length(..), AnchorAlignment(..), Fill(..), Transform(..), em)
 
 colors : Array Color
 colors =
@@ -65,6 +65,7 @@ makeLabel configFn index (label, color) =
             [ transform [ Translate x y ]
             , dy (em 0.35)
             , fontSize <| Px 25
+            , fontWeight FontWeightBold
             , textAnchor AnchorMiddle
             , fill <| Fill color.text
             ]
@@ -75,44 +76,46 @@ makeDonutSector configFn index (label, color) =
     let
         slice = configFn index
     in
-        Path.element (Shape.arc <| slice) [ fill <| Fill color.background, stroke Color.black ]
+        Path.element (Shape.arc <| slice) [ fill <| Fill color.background, stroke darkerblue ]
 
 type alias CellColor = { text : Color, background : Color }
 
+darkblue = Color.rgb255 31 31 44
+darkerblue = Color.rgb255 6 7 19
+darkergrey = Color.rgb255 16 16 27
+darkgrey = Color.rgb255 62 64 67
+lightblue = Color.rgb255 25 126 255
+darkred = Color.rgb255 66 32 39
+
 majorCellColor =
   { text = Color.white
-  , background = Color.blue
+  , background = lightblue
   }
 
 minorCellColor =
   { text = Color.white
-  , background = Color.red
+  , background = darkred
   }
 
 diminishedCellColor =
   { text = Color.white
-  , background = Color.green
+  , background = darkred
   }
 
-
-regularCellColor =
-  { text = Color.black
-  , background = Color.grey
-  }
 
 blankChordColor =
-  { text = Color.black
-  , background = Color.black
+  { text = darkerblue
+  , background = darkerblue
   }
 
 regularNoteColor =
-  { text = Color.black
-  , background = Color.charcoal
+  { text = darkerblue
+  , background = darkblue
   }
 
 selectedChordColor =
-  { background = Color.charcoal
-  , text = Color.grey
+  { background = darkergrey
+  , text = darkgrey
   }
 
 circleVisualization circleWrap selectedScale chords =

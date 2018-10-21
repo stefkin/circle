@@ -40,7 +40,7 @@ view model =
         chords = scaleChords model.mode |> List.map chordToString
         chords_ = scaleChords model.mode |> List.map chordToString
     in
-        Html.section [style "background-color" "black", class "section"]
+        Html.section [style "background-color" "rgb(6,7,19)", class "section"]
             [Html.div [ class "container"]
                  [ Html.div [class "columns"]
                        [ Html.div [class "column is-6"]
