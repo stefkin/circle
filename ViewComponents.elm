@@ -4,40 +4,39 @@ import Html.Events exposing (..)
 import Html.Attributes exposing (..)
 import List exposing (head, drop)
 import ListUtils exposing (indexOf, get)
-import Html.Events.Extra exposing (targetValueIntParse)
+--import Html.Events.Extra exposing (targetValueIntParse)
 import Json.Decode as Json
+import Result
 
-selector : List a -> (a -> msg) -> Html msg
-selector xs msg =
+selector : List a -> (a -> msg) -> a -> Html msg
+selector xs msg default =
     let
       optionTag val =
-        option [ value <| toString << xToInt <| val ] [ text (toString val) ]
+        option [ value <| String.fromInt << xToInt <| val ] [ text (Debug.toString val) ]
 
+      intToX : Int -> a
       intToX i = case get i xs of
                      Just x -> x
-                     Nothing -> Debug.crash "Error"
+                     Nothing -> default
 
+      xToInt : a -> Int
       xToInt x = case indexOf x xs of
-                     Just x -> x
-                     Nothing -> Debug.crash "Error"
+                     Just y -> y
+                     Nothing -> 0
+
+      maybeIntToX : Maybe Int -> a
+      maybeIntToX maybeint =
+        Maybe.withDefault 0 maybeint |> intToX
+
+      handler = targetValue |> Json.map String.toInt |> Json.map maybeIntToX |> Json.map msg
     in
       Html.div [class ""]
-          [select [ on "change" (Json.map msg (Json.map intToX targetValueIntParse)) ]
+          [select [ on "change" (handler) ]
               (List.map optionTag xs)
           ]
 
 padJoin n xs =
     List.map (String.padRight n ' ') xs |> String.join " "
-
-renderPitches : List (a1, a2) -> Html msg
-renderPitches pitches =
-    let
-      pitchToStr = toString << Tuple.first
-      pcs = List.map pitchToStr pitches
-      renderPc pc =
-          Html.span [] [ text (toString pc)]
-    in
-      Html.div [class "columns"] [text <| padJoin 4 pcs]
 
 renderChords : List String -> Html msg
 renderChords chords =

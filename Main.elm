@@ -1,9 +1,10 @@
 module Main exposing (main)
 import Euteprea exposing (..)
-import CollageTest exposing (circleCollage)
+import VisualizationTest exposing (circleVisualization)
 import Html exposing (..)
+import Browser
 import Html.Attributes exposing (..)
-import ViewComponents exposing (stylesheet, renderPitches, selector, renderChords)
+import ViewComponents exposing (stylesheet, selector, renderChords)
 
 type alias Model =
     { tonic : PitchClass
@@ -13,9 +14,9 @@ type alias Model =
 initialModel : Model
 initialModel = Model C Major
 
-main : Program Never Model Msg
+main : Program () Model Msg
 main =
-  Html.beginnerProgram { model = initialModel, view = view, update = update }
+  Browser.sandbox { init = initialModel, view = view, update = update }
 
 type Msg = ChangeTonic PitchClass | ChangeMode Mode
 
@@ -33,9 +34,9 @@ view model =
         modes = [Major, Minor, Dorian, Phrygian, Lydian, Mixolydian, Aeolian, Locrian]
         pcs = [C,Cs,D,Ds,E,F,Fs,G,Gs,A,As,B]
         selectedScale = scale model.mode model.tonic
-        selectedScale_ = scale model.mode model.tonic |> List.map Tuple.first |> List.map toString
-        circleWrap = List.take 12 circle
-        circleWrap_ = List.take 12 circle |> List.map Tuple.first |> List.map toString
+        selectedScale_ = scale model.mode model.tonic |> List.map Tuple.first |> List.map Debug.toString
+        circleWrap = List.take 12 <| Debug.log "circle" circle
+        circleWrap_ = List.take 12 circle |> List.map Tuple.first |> List.map Debug.toString
         chords = scaleChords model.mode |> List.map chordToString
         chords_ = scaleChords model.mode |> List.map chordToString
     in
@@ -43,11 +44,11 @@ view model =
             [Html.div [class "container"]
                  [ Html.div [class "columns"]
                        [ Html.div [class "column is-6"]
-                             [ selector pcs ChangeTonic
-                             , selector modes ChangeMode
+                             [ selector pcs ChangeTonic C
+                             , selector modes ChangeMode Major
                              ]
                        , Html.div [class "column is-6"]
-                           [circleCollage circleWrap_ selectedScale_ chords_]
+                           [circleVisualization circleWrap_ selectedScale_ chords_]
                        ]
                  , stylesheet "https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css"
                  ]

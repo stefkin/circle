@@ -21,41 +21,41 @@ get n xs = head (drop n xs)
 
 intToPc : Int -> PitchClass
 intToPc i  =
-    case i of
-      (-2) -> Cff
-      (-1) -> Cf
-      0 -> C
-      1 -> Cs
+    case String.fromInt <| i + 2 of
+      "-2" -> Cff
+      "-1" -> Cf
+      "0" -> C
+      "1" -> Cs
       -- 2 -> Css
       -- 0 -> Dff
       -- 1 -> Df
-      2 -> D
-      3 -> Ds
+      "2" -> D
+      "3" -> Ds
       -- 4 -> Dss
       -- 2 -> Eff
       -- 3 -> Ef
-      4 -> E
+      "4" -> E
       -- 5 -> Es
       -- 6 -> Ess
       -- 3 -> Fff
       -- 4 -> Ff
-      5 -> F
-      6 -> Fs
+      "5" -> F
+      "6" -> Fs
       -- 7 -> Fss
       -- 5 -> Gff
       -- 6 -> Gf
-      7 -> G
-      8 -> Gs
+      "7" -> G
+      "8" -> Gs
       -- 9 -> Gss
       -- 7 -> Aff
       -- 8 -> Af
-      9 -> A
-      10 -> As
+      "9" -> A
+      "10" -> As
       -- 11 -> Ass
       -- 9 -> Bff
       -- 10 -> Bf
-      11 -> B
-      12 -> Bs
+      "11" -> B
+      "12" -> Bs
       -- 13 -> Bss
       _ -> C
 pcToInt : PitchClass -> Int
@@ -103,7 +103,7 @@ pitch : AbsPitch -> Pitch
 pitch ap  =
  let
    oct = ap // 12
-   n = ap % 12
+   n = modBy 12 ap
    maybeP = get n [C,Cs,D,Ds,E,F,Fs,G,Gs,A,As,B]
    p = Maybe.withDefault C maybeP
  in
@@ -117,7 +117,6 @@ circle_ p n =
   let
     fifth = trans 7
     nextNote = fifth p
-    nums = List.range 1 n
   in
     case n of
       0 -> []
@@ -179,7 +178,7 @@ chordToString (pos, ct) =
                        Min ->
                            String.toLower
                        Dim ->
-                           (flip (String.append) "º") >> String.toLower
+                         \x -> String.append x "º" |> String.toLower
         base = case pos of
                    1 -> "I"
                    2 -> "II"
