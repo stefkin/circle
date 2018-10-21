@@ -40,8 +40,8 @@ view model =
         chords = scaleChords model.mode |> List.map chordToString
         chords_ = scaleChords model.mode |> List.map chordToString
     in
-        Html.section [class "section"]
-            [Html.div [class "container"]
+        Html.section [style "background-color" "black", class "section"]
+            [Html.div [ class "container"]
                  [ Html.div [class "columns"]
                        [ Html.div [class "column is-6"]
                              [ selector pcs ChangeTonic C

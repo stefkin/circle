@@ -1,15 +1,15 @@
 module VisualizationTest exposing (circleVisualization)
 
-import ListUtils exposing (zip, find)
+import ListUtils exposing (zip, find, indexOf)
 import Array exposing (Array)
 import Color exposing (Color)
 import Path
 import Shape exposing (defaultPieConfig, Arc)
 import TypedSvg exposing (g, svg, text_)
-import TypedSvg.Attributes exposing (dy, fill, stroke, textAnchor, transform, viewBox)
+import TypedSvg.Attributes exposing (fontSize, dy, fill, stroke, textAnchor, transform, viewBox)
 import TypedSvg.Attributes.InPx exposing (height, width)
 import TypedSvg.Core exposing (Svg, text)
-import TypedSvg.Types exposing (AnchorAlignment(..), Fill(..), Transform(..), em)
+import TypedSvg.Types exposing (Length(..), AnchorAlignment(..), Fill(..), Transform(..), em)
 
 colors : Array Color
 colors =
@@ -64,6 +64,7 @@ makeLabel configFn index (label, color) =
         text_
             [ transform [ Translate x y ]
             , dy (em 0.35)
+            , fontSize <| Px 25
             , textAnchor AnchorMiddle
             , fill <| Fill color.text
             ]
@@ -74,31 +75,67 @@ makeDonutSector configFn index (label, color) =
     let
         slice = configFn index
     in
-        Path.element (Shape.arc <| slice) [ fill <| Fill color.background, stroke Color.white ]
+        Path.element (Shape.arc <| slice) [ fill <| Fill color.background, stroke Color.black ]
 
 type alias CellColor = { text : Color, background : Color }
 
-selectedCellColor =
+majorCellColor =
   { text = Color.white
   , background = Color.blue
   }
+
+minorCellColor =
+  { text = Color.white
+  , background = Color.red
+  }
+
+diminishedCellColor =
+  { text = Color.white
+  , background = Color.green
+  }
+
 
 regularCellColor =
   { text = Color.black
   , background = Color.grey
   }
 
+blankChordColor =
+  { text = Color.black
+  , background = Color.black
+  }
+
+regularNoteColor =
+  { text = Color.black
+  , background = Color.charcoal
+  }
+
+selectedChordColor =
+  { background = Color.charcoal
+  , text = Color.grey
+  }
+
 circleVisualization circleWrap selectedScale chords =
     let
       circleWrap_ =
-          List.map (\n -> if List.member n selectedScale then (n, selectedCellColor) else (n, regularCellColor)) circleWrap
+          List.map (\n ->
+            case indexOf n selectedScale of
+              Just 0 -> (n, majorCellColor)
+              Just 1 -> (n, majorCellColor)
+              Just 2 -> (n, majorCellColor)
+              Just 3 -> (n, minorCellColor)
+              Just 4 -> (n, minorCellColor)
+              Just 5 -> (n, minorCellColor)
+              Just 6 -> (n, diminishedCellColor)
+              _ -> (n, regularNoteColor)
+              ) circleWrap
       chords_ =
           let
               zz = zip selectedScale chords
               noteToChord n =
                   Tuple.second (Maybe.withDefault ("", "") <| find (\(n_,c) -> n == n_) zz)
           in
-            List.map (\n -> if List.member n selectedScale then (noteToChord n, regularCellColor) else ("", regularCellColor)) circleWrap
+            List.map (\n -> if List.member n selectedScale then (noteToChord n, selectedChordColor) else ("", blankChordColor)) circleWrap
       outerDonutSettings = nthArcConfig { outerRadius = radius, innerRadius = radius - 60 }
       innerDonutSettings = nthArcConfig { outerRadius = radius - 60, innerRadius = radius - 100 }
     in
