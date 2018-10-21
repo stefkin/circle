@@ -1,14 +1,14 @@
 
 Main.elm,235
 module MainMain1,0
-type alias Model =type8,249
-type alias ModelModel8,249
-initialModel =initialModel14,339
-main =main17,400
-type Msg =type20,486
-type MsgMsg20,486
-update msg model =update23,570
-view model =view31,733
+type alias Model =type9,261
+type alias ModelModel9,261
+initialModel =initialModel15,351
+main =main18,409
+type Msg =type21,489
+type MsgMsg21,489
+update msg model =update24,573
+view model =view32,736
 
 Euteprea.elm,1152
 module EutepreaEuteprea1,0
@@ -29,23 +29,23 @@ type alias Pitch =type17,532
 type alias PitchPitch17,532
 get n xs =get20,604
 intToPc i  =intToPc23,661
-pcToInt pc  =pcToInt62,1298
-absPitch (pc,oct)  =absPitch100,1896
-pitch ap  =pitch103,1968
-trans i p  =trans113,2149
-circle_ p n =circle_116,2223
-circle =circle128,2417
-genScale pos tonic =genScale131,2489
-modeToTonicPosition mode =modeToTonicPosition142,2894
-scale =scale156,3200
-type ChordType =type158,3241
-type ChordTypeChordType158,3241
-type alias ChordPosition =type159,3274
-type alias ChordPositionChordPosition159,3274
-type alias Chord =type160,3305
-type alias ChordChord160,3305
-scaleChords mode =scaleChords163,3385
-chordToString (pos, ct) =chordToString174,3750
+pcToInt pc  =pcToInt62,1346
+absPitch (pc,oct)  =absPitch100,1944
+pitch ap  =pitch103,2016
+trans i p  =trans113,2201
+circle_ p n =circle_116,2275
+circle =circle127,2443
+genScale pos tonic =genScale130,2515
+modeToTonicPosition mode =modeToTonicPosition141,2920
+scale =scale155,3226
+type ChordType =type157,3267
+type ChordTypeChordType157,3267
+type alias ChordPosition =type158,3300
+type alias ChordPositionChordPosition158,3300
+type alias Chord =type159,3331
+type alias ChordChord159,3331
+scaleChords mode =scaleChords162,3411
+chordToString (pos, ct) =chordToString173,3776
 
 ListUtils.elm,142
 module ListUtilsListUtils1,0
@@ -54,40 +54,36 @@ get n xs =get20,393
 zip xs ys =zip23,460
 find predicate list =find29,593
 
-ViewComponents.elm,230
+ViewComponents.elm,194
 module ViewComponentsViewComponents1,0
-selector xs msg =selector11,335
-padJoin n xs =padJoin29,876
-renderPitches pitches =renderPitches33,993
-renderChords chords =renderChords43,1277
-stylesheet href =stylesheet47,1391
+selector xs msg default =selector12,356
+padJoin n xs =padJoin38,1098
+renderChords chords =renderChords42,1212
+stylesheet href =stylesheet46,1326
 
-CollageTest.elm,854
-module CollageTestCollageTest1,0
-type alias Model =type17,421
-type alias ModelModel17,421
-init =init22,477
-type MsgMsg30,593
-    = SwitchSwitch31,602
-update msg model =update35,648
-border =border47,869
-txt =txt56,948
-elps model =elps66,1052
-rect =rect81,1361
-tria =tria87,1471
-penta =penta93,1566
-alignments =alignments103,1688
-sectorLines line =sectorLines109,1839
-sectorText r renderedNotes =sectorText112,1955
-circleWrap =circleWrap126,2577
-selectedScale =selectedScale127,2656
-chords =chords128,2708
-renderNote (note, isBold) =renderNote129,2762
-ssscale =ssscale139,3068
-circleWrap_ =circleWrap_141,3104
-chords_ =chords_144,3243
-chordss =chordss154,3559
-chordsss =chordsss155,3634
-view model =view158,3711
-circleCollage circleWrap selectedScale chords =circleCollage170,4102
-main =main196,5133
+VisualizationTest.elm,976
+module VisualizationTestVisualizationTest1,0
+colors =colors15,603
+w =w26,880
+h =h27,888
+defaultArcConfig =defaultArcConfig30,920
+toRad deg =toRad40,1115
+nthArcConfig baseConfig index =nthArcConfig43,1213
+radius =radius52,1465
+makeLabel configFn index (label, color) =makeLabel55,1491
+makeDonutSector configFn index (label, color) =makeDonutSector75,2134
+type alias CellColor =type81,2324
+type alias CellColorCellColor81,2324
+darkblue =darkblue83,2385
+darkerblue =darkerblue84,2418
+darkergrey =darkergrey85,2451
+darkgrey =darkgrey86,2486
+lightblue =lightblue87,2519
+darkred =darkred88,2555
+majorCellColor =majorCellColor90,2588
+minorCellColor =minorCellColor95,2660
+diminishedCellColor =diminishedCellColor100,2730
+blankChordColor =blankChordColor106,2806
+regularNoteColor =regularNoteColor111,2879
+selectedChordColor =selectedChordColor116,2951
+circleVisualization circleWrap selectedScale chords =circleVisualization121,3025

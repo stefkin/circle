@@ -16,48 +16,6 @@ type alias AbsPitch = Int
 type alias Octave = Int
 type alias Pitch = (PitchClass, Octave)
 
-get : Int -> List a -> Maybe a
-get n xs = head (drop n xs)
-
-intToPc : Int -> PitchClass
-intToPc i  =
-    case String.fromInt <| i + 2 of
-      "-2" -> Cff
-      "-1" -> Cf
-      "0" -> C
-      "1" -> Cs
-      -- 2 -> Css
-      -- 0 -> Dff
-      -- 1 -> Df
-      "2" -> D
-      "3" -> Ds
-      -- 4 -> Dss
-      -- 2 -> Eff
-      -- 3 -> Ef
-      "4" -> E
-      -- 5 -> Es
-      -- 6 -> Ess
-      -- 3 -> Fff
-      -- 4 -> Ff
-      "5" -> F
-      "6" -> Fs
-      -- 7 -> Fss
-      -- 5 -> Gff
-      -- 6 -> Gf
-      "7" -> G
-      "8" -> Gs
-      -- 9 -> Gss
-      -- 7 -> Aff
-      -- 8 -> Af
-      "9" -> A
-      "10" -> As
-      -- 11 -> Ass
-      -- 9 -> Bff
-      -- 10 -> Bf
-      "11" -> B
-      "12" -> Bs
-      -- 13 -> Bss
-      _ -> C
 pcToInt : PitchClass -> Int
 pcToInt pc  =
     case pc of
@@ -96,6 +54,7 @@ pcToInt pc  =
       B  -> 11
       Bs  -> 12
       Bss  -> 13
+
 absPitch : Pitch -> AbsPitch
 absPitch (pc,oct)  = 12*(oct+1) + pcToInt pc
 
@@ -137,6 +96,7 @@ genScale pos tonic =
   in
     singleScaleWrap
     -- filter (\ (pc, o) -> member pc singleScaleWrap) circle
+
 modeToTonicPosition : Mode -> Int
 modeToTonicPosition mode =
     case mode of

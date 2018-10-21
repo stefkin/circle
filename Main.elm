@@ -1,10 +1,10 @@
 module Main exposing (main)
-import Euteprea exposing (..)
+import Euteprea exposing (circle, scale, scaleChords, chordToString, Mode(..), PitchClass(..))
 import VisualizationTest exposing (circleVisualization)
 import Html exposing (..)
 import Browser
 import Html.Attributes exposing (..)
-import ViewComponents exposing (stylesheet, selector, renderChords)
+import ViewComponents exposing (stylesheet, selector)
 
 type alias Model =
     { tonic : PitchClass
@@ -33,12 +33,9 @@ view model =
     let
         modes = [Major, Minor, Dorian, Phrygian, Lydian, Mixolydian, Aeolian, Locrian]
         pcs = [C,Cs,D,Ds,E,F,Fs,G,Gs,A,As,B]
-        selectedScale = scale model.mode model.tonic
-        selectedScale_ = scale model.mode model.tonic |> List.map Tuple.first |> List.map Debug.toString
-        circleWrap = List.take 12 <| Debug.log "circle" circle
-        circleWrap_ = List.take 12 circle |> List.map Tuple.first |> List.map Debug.toString
+        selectedScale = scale model.mode model.tonic |> List.map Tuple.first |> List.map Debug.toString
+        circleWrap = List.take 12 circle |> List.map Tuple.first |> List.map Debug.toString
         chords = scaleChords model.mode |> List.map chordToString
-        chords_ = scaleChords model.mode |> List.map chordToString
     in
         Html.section [style "background-color" "rgb(6,7,19)", class "section"]
             [Html.div [ class "container"]
@@ -48,7 +45,7 @@ view model =
                              , selector modes ChangeMode Major
                              ]
                        , Html.div [class "column is-6"]
-                           [circleVisualization circleWrap_ selectedScale_ chords_]
+                           [circleVisualization circleWrap selectedScale chords]
                        ]
                  , stylesheet "https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css"
                  ]
