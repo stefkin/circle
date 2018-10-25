@@ -4639,6 +4639,109 @@ var author$project$Euteprea$circle = A2(
 	author$project$Euteprea$circle_,
 	_Utils_Tuple2(author$project$Euteprea$C, 0),
 	120);
+var author$project$Euteprea$modeToString = function (mode) {
+	switch (mode.$) {
+		case 'Major':
+			return 'Major';
+		case 'Minor':
+			return 'Minor';
+		case 'Ionian':
+			return 'Ionian';
+		case 'Dorian':
+			return 'Dorian';
+		case 'Phrygian':
+			return 'Phrygian';
+		case 'Lydian':
+			return 'Lydian';
+		case 'Mixolydian':
+			return 'Mixolydian';
+		case 'Aeolian':
+			return 'Aeolian';
+		case 'Locrian':
+			return 'Locrian';
+		default:
+			var a = mode.a;
+			return a;
+	}
+};
+var author$project$Euteprea$pcToString = function (pc) {
+	switch (pc.$) {
+		case 'Cff':
+			return 'Cbb';
+		case 'Cf':
+			return 'Cb';
+		case 'C':
+			return 'C';
+		case 'Cs':
+			return 'C#';
+		case 'Css':
+			return 'C##';
+		case 'Dff':
+			return 'Dbb';
+		case 'Df':
+			return 'Db';
+		case 'D':
+			return 'D';
+		case 'Ds':
+			return 'D#';
+		case 'Dss':
+			return 'D##';
+		case 'Eff':
+			return 'Ebb';
+		case 'Ef':
+			return 'Eb';
+		case 'E':
+			return 'E';
+		case 'Es':
+			return 'E#';
+		case 'Ess':
+			return 'E##';
+		case 'Fff':
+			return 'Fbb';
+		case 'Ff':
+			return 'Fb';
+		case 'F':
+			return 'F';
+		case 'Fs':
+			return 'F#';
+		case 'Fss':
+			return 'F##';
+		case 'Gff':
+			return 'Gbb';
+		case 'Gf':
+			return 'Gb';
+		case 'G':
+			return 'G';
+		case 'Gs':
+			return 'G#';
+		case 'Gss':
+			return 'G##';
+		case 'Aff':
+			return 'Abb';
+		case 'Af':
+			return 'Ab';
+		case 'A':
+			return 'A';
+		case 'As':
+			return 'A#';
+		case 'Ass':
+			return 'A##';
+		case 'Bff':
+			return 'Bbb';
+		case 'Bf':
+			return 'Bb';
+		case 'B':
+			return 'B';
+		case 'Bs':
+			return 'B#';
+		default:
+			return 'B##';
+	}
+};
+var author$project$Euteprea$pitchToString = function (_n0) {
+	var pc = _n0.a;
+	return author$project$Euteprea$pcToString(pc);
+};
 var elm$core$Basics$eq = _Utils_equal;
 var author$project$ListUtils$indexOf = F2(
 	function (el, list) {
@@ -4976,7 +5079,6 @@ var elm$core$Basics$composeR = F3(
 		return g(
 			f(x));
 	});
-var elm$core$Debug$toString = _Debug_toString;
 var elm$core$String$fromInt = _String_fromNumber;
 var elm$core$String$toInt = _String_toInt;
 var elm$core$Basics$identity = function (x) {
@@ -5382,8 +5484,8 @@ var elm$html$Html$Events$targetValue = A2(
 	_List_fromArray(
 		['target', 'value']),
 	elm$json$Json$Decode$string);
-var author$project$ViewComponents$selector = F3(
-	function (xs, msg, _default) {
+var author$project$ViewComponents$selector = F4(
+	function (xs, msg, _default, toString) {
 		var xToInt = function (x) {
 			return A2(
 				elm$core$Maybe$withDefault,
@@ -5401,7 +5503,7 @@ var author$project$ViewComponents$selector = F3(
 				_List_fromArray(
 					[
 						elm$html$Html$text(
-						elm$core$Debug$toString(val))
+						toString(val))
 					]));
 		};
 		var intToX = function (i) {
@@ -7507,22 +7609,16 @@ var elm$html$Html$Attributes$style = elm$virtual_dom$VirtualDom$style;
 var author$project$Main$view = function (model) {
 	var selectedScale = A2(
 		elm$core$List$map,
-		elm$core$Debug$toString,
-		A2(
-			elm$core$List$map,
-			elm$core$Tuple$first,
-			A2(author$project$Euteprea$scale, model.mode, model.tonic)));
+		author$project$Euteprea$pitchToString,
+		A2(author$project$Euteprea$scale, model.mode, model.tonic));
 	var pcs = _List_fromArray(
 		[author$project$Euteprea$C, author$project$Euteprea$Cs, author$project$Euteprea$D, author$project$Euteprea$Ds, author$project$Euteprea$E, author$project$Euteprea$F, author$project$Euteprea$Fs, author$project$Euteprea$G, author$project$Euteprea$Gs, author$project$Euteprea$A, author$project$Euteprea$As, author$project$Euteprea$B]);
 	var modes = _List_fromArray(
 		[author$project$Euteprea$Major, author$project$Euteprea$Minor, author$project$Euteprea$Dorian, author$project$Euteprea$Phrygian, author$project$Euteprea$Lydian, author$project$Euteprea$Mixolydian, author$project$Euteprea$Aeolian, author$project$Euteprea$Locrian]);
 	var circleWrap = A2(
 		elm$core$List$map,
-		elm$core$Debug$toString,
-		A2(
-			elm$core$List$map,
-			elm$core$Tuple$first,
-			A2(elm$core$List$take, 12, author$project$Euteprea$circle)));
+		author$project$Euteprea$pitchToString,
+		A2(elm$core$List$take, 12, author$project$Euteprea$circle));
 	var chords = A2(
 		elm$core$List$map,
 		author$project$Euteprea$chordToString,
@@ -7560,8 +7656,8 @@ var author$project$Main$view = function (model) {
 									]),
 								_List_fromArray(
 									[
-										A3(author$project$ViewComponents$selector, pcs, author$project$Main$ChangeTonic, author$project$Euteprea$C),
-										A3(author$project$ViewComponents$selector, modes, author$project$Main$ChangeMode, author$project$Euteprea$Major)
+										A4(author$project$ViewComponents$selector, pcs, author$project$Main$ChangeTonic, author$project$Euteprea$C, author$project$Euteprea$pcToString),
+										A4(author$project$ViewComponents$selector, modes, author$project$Main$ChangeMode, author$project$Euteprea$Major, author$project$Euteprea$modeToString)
 									])),
 								A2(
 								elm$html$Html$div,

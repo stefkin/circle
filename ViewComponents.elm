@@ -6,11 +6,11 @@ import List exposing (head, drop)
 import ListUtils exposing (indexOf, get)
 import Json.Decode as Json
 
-selector : List a -> (a -> msg) -> a -> Html msg
-selector xs msg default =
+selector : List a -> (a -> msg) -> a -> (a -> String) -> Html msg
+selector xs msg default toString =
     let
       optionTag val =
-        option [ value <| String.fromInt << xToInt <| val ] [ text (Debug.toString val) ]
+        option [ value <| String.fromInt << xToInt <| val ] [ text (toString val) ]
       intToX : Int -> a
       intToX i = get i xs |> Maybe.withDefault default
       xToInt : a -> Int

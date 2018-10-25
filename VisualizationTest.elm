@@ -28,6 +28,7 @@ defaultArcConfig =
     , padRadius = 0
     }
 
+toRad : Float -> Float
 toRad deg = deg * pi / 180
 
 buildArcConfig : {outerRadius: Float, innerRadius: Float} -> Int -> Arc
@@ -43,6 +44,7 @@ radius : Float
 radius =
     min w h / 2
 
+makeLabel : (Int -> Arc) -> Int -> (String, CellColor) -> Svg msg
 makeLabel arcBuilder index (label, color) =
     let
         arc = arcBuilder index

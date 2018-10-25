@@ -1,5 +1,7 @@
 module Main exposing (main)
-import Euteprea exposing (circle, scale, scaleChords, chordToString, Mode(..), PitchClass(..))
+import Euteprea exposing (circle, scale, scaleChords, pitchToString,
+                          pcToString, modeToString, chordToString,
+                          Mode(..), PitchClass(..))
 import VisualizationTest exposing (circleVisualization)
 import Html exposing (..)
 import Browser
@@ -33,16 +35,16 @@ view model =
     let
         modes = [Major, Minor, Dorian, Phrygian, Lydian, Mixolydian, Aeolian, Locrian]
         pcs = [C,Cs,D,Ds,E,F,Fs,G,Gs,A,As,B]
-        selectedScale = scale model.mode model.tonic |> List.map Tuple.first |> List.map Debug.toString
-        circleWrap = List.take 12 circle |> List.map Tuple.first |> List.map Debug.toString
+        selectedScale = scale model.mode model.tonic |> List.map pitchToString
+        circleWrap = List.take 12 circle |> List.map pitchToString
         chords = scaleChords model.mode |> List.map chordToString
     in
         Html.section [style "background-color" "rgb(6,7,19)", class "section"]
             [Html.div [ class "container"]
                  [ Html.div [class "columns"]
                        [ Html.div [class "column is-6"]
-                             [ selector pcs ChangeTonic C
-                             , selector modes ChangeMode Major
+                             [ selector pcs ChangeTonic C pcToString
+                             , selector modes ChangeMode Major modeToString
                              ]
                        , Html.div [class "column is-6"]
                            [circleVisualization circleWrap selectedScale chords]

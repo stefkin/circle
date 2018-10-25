@@ -19,41 +19,41 @@ type alias Pitch = (PitchClass, Octave)
 pcToInt : PitchClass -> Int
 pcToInt pc  =
     case pc of
-      Cff  -> -2
-      Cf  -> -1
-      C  -> 0
-      Cs  -> 1
-      Css  -> 2
-      Dff  -> 0
-      Df  -> 1
-      D  -> 2
-      Ds  -> 3
-      Dss  -> 4
-      Eff  -> 2
-      Ef  -> 3
-      E  -> 4
-      Es  -> 5
-      Ess  -> 6
-      Fff  -> 3
-      Ff  -> 4
-      F  -> 5
-      Fs  -> 6
-      Fss  -> 7
-      Gff  -> 5
-      Gf  -> 6
-      G  -> 7
-      Gs  -> 8
-      Gss  -> 9
-      Aff  -> 7
-      Af  -> 8
-      A  -> 9
-      As  -> 10
-      Ass  -> 11
-      Bff  -> 9
-      Bf  -> 10
-      B  -> 11
-      Bs  -> 12
-      Bss  -> 13
+        Cff  -> -2
+        Cf  -> -1
+        C  -> 0
+        Cs  -> 1
+        Css  -> 2
+        Dff  -> 0
+        Df  -> 1
+        D  -> 2
+        Ds  -> 3
+        Dss  -> 4
+        Eff  -> 2
+        Ef  -> 3
+        E  -> 4
+        Es  -> 5
+        Ess  -> 6
+        Fff  -> 3
+        Ff  -> 4
+        F  -> 5
+        Fs  -> 6
+        Fss  -> 7
+        Gff  -> 5
+        Gf  -> 6
+        G  -> 7
+        Gs  -> 8
+        Gss  -> 9
+        Aff  -> 7
+        Af  -> 8
+        A  -> 9
+        As  -> 10
+        Ass  -> 11
+        Bff  -> 9
+        Bf  -> 10
+        B  -> 11
+        Bs  -> 12
+        Bss  -> 13
 
 absPitch : Pitch -> AbsPitch
 absPitch (pc,oct)  = 12*(oct+1) + pcToInt pc
@@ -149,3 +149,59 @@ chordToString (pos, ct) =
                    _ -> "VII"
     in
         modifier base
+
+pcToString : PitchClass -> String
+pcToString pc =
+    case pc of
+      Cff  -> "Cbb"
+      Cf  -> "Cb"
+      C  -> "C"
+      Cs  -> "C#"
+      Css  -> "C##"
+      Dff  -> "Dbb"
+      Df  -> "Db"
+      D  -> "D"
+      Ds  -> "D#"
+      Dss  -> "D##"
+      Eff  -> "Ebb"
+      Ef  -> "Eb"
+      E  -> "E"
+      Es  -> "E#"
+      Ess  -> "E##"
+      Fff  -> "Fbb"
+      Ff  -> "Fb"
+      F  -> "F"
+      Fs  -> "F#"
+      Fss  -> "F##"
+      Gff  -> "Gbb"
+      Gf  -> "Gb"
+      G  -> "G"
+      Gs  -> "G#"
+      Gss  -> "G##"
+      Aff  -> "Abb"
+      Af  -> "Ab"
+      A  -> "A"
+      As  -> "A#"
+      Ass  -> "A##"
+      Bff  -> "Bbb"
+      Bf  -> "Bb"
+      B  -> "B"
+      Bs  -> "B#"
+      Bss  -> "B##"
+
+pitchToString : Pitch -> String
+pitchToString (pc, _) = pcToString pc
+
+modeToString : Mode -> String
+modeToString mode =
+    case mode of
+        Major -> "Major"
+        Minor -> "Minor"
+        Ionian -> "Ionian"
+        Dorian -> "Dorian"
+        Phrygian -> "Phrygian"
+        Lydian -> "Lydian"
+        Mixolydian -> "Mixolydian"
+        Aeolian -> "Aeolian"
+        Locrian -> "Locrian"
+        CustomMode a -> a
